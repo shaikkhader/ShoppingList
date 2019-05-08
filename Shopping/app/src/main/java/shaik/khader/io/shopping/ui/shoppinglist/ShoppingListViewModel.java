@@ -1,5 +1,6 @@
 package shaik.khader.io.shopping.ui.shoppinglist;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -35,9 +36,9 @@ public class ShoppingListViewModel extends ViewModel {
     private static final String TAG = ShoppingListViewModel.class.getSimpleName();
 
 
-    ShoppingRepository mShoppingRepository;
-
-    TrolleyRepository mTrolleyRepository;
+    private ShoppingRepository mShoppingRepository;
+    private TrolleyRepository mTrolleyRepository;
+    private Context mContext;
 
     private CompositeDisposable mCompositeDisposable;
 
@@ -47,9 +48,10 @@ public class ShoppingListViewModel extends ViewModel {
 
 
     @Inject
-    public ShoppingListViewModel(ShoppingRepository shoppingRepository, TrolleyRepository trolleyRepository) {
+    public ShoppingListViewModel(ShoppingRepository shoppingRepository, TrolleyRepository trolleyRepository, Context context) {
         mShoppingRepository = shoppingRepository;
         mTrolleyRepository = trolleyRepository;
+        mContext = context;
         mCompositeDisposable = new CompositeDisposable();
     }
 
@@ -57,22 +59,36 @@ public class ShoppingListViewModel extends ViewModel {
         return productList;
     }
 
-    public void fetchData() {
+    LiveData<Boolean> getError() {
+        return repoLoadError;
+    }
+
+    LiveData<Boolean> getLoading() {
+        return loading;
+    }
+
+    void fetchData() {
+        loading.setValue(true);
         mCompositeDisposable.add(mShoppingRepository.getProducts().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSingleObserver<Products>() {
                     @Override
                     public void onSuccess(Products products) {
-                        Log.d(TAG, "products" + products);
+                        repoLoadError.setValue(false);
                         productList.setValue(products.products);
+                        loading.setValue(false);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "Error" + e);
+                        repoLoadError.setValue(true);
+                        loading.setValue(false);
                     }
                 }));
     }
 
+    public Context getContext() {
+        return mContext;
+    }
 
     @Override
     protected void onCleared() {

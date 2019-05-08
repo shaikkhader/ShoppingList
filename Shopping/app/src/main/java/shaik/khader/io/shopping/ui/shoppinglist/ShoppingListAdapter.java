@@ -1,5 +1,6 @@
 package shaik.khader.io.shopping.ui.shoppinglist;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +36,10 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     private final List<Product> data = new ArrayList<>();
     private ProductSelectionListener productSelectionListener;
-
+    private ShoppingListViewModel mShoppingListViewModel;
 
     ShoppingListAdapter(ShoppingListViewModel shoppingListViewModel, LifecycleOwner lifecycleOwner, ProductSelectionListener productSelectionListener) {
+        this.mShoppingListViewModel = shoppingListViewModel;
         this.productSelectionListener = productSelectionListener;
         shoppingListViewModel.getProductList().observe(lifecycleOwner, product -> {
             data.clear();
@@ -57,7 +59,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder productViewHolder, int position) {
-        productViewHolder.bind(data.get(position));
+        productViewHolder.bind(mShoppingListViewModel,data.get(position));
     }
 
     @Override
@@ -73,6 +75,9 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         @BindView(R.id.shopping_list_product_image)
         ImageView productImageView;
 
+        @BindView(R.id.shopping_list_product_price)
+        TextView productPrice;
+
         private Product product;
 
         ProductViewHolder(@NonNull View itemView,final ProductSelectionListener productSelectionListener) {
@@ -86,9 +91,10 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
         }
 
-        void bind(Product product) {
+        void bind(ShoppingListViewModel shoppingListViewModel,Product product) {
             this.product = product;
             productNameTextView.setText(product.getName());
+            productPrice.setText(shoppingListViewModel.getContext().getResources().getString(R.string.price_place_holder,product.getPrice()));
             Picasso.get().load(product.getImage_url()).into(productImageView);
         }
     }

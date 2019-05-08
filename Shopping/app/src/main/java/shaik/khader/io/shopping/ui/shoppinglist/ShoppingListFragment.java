@@ -40,8 +40,9 @@ public class ShoppingListFragment extends BaseFragment implements ProductSelecti
     @BindView(R.id.generic_error_text_view)
     TextView generic_error_text_view;
     @BindView(R.id.loading_progress_view)
-
     View loadingView;
+
+    private static final int NO_OF_COLUMNS = 2;
 
 
     @Inject
@@ -62,7 +63,36 @@ public class ShoppingListFragment extends BaseFragment implements ProductSelecti
         shoppingListViewModel.fetchData();
 
         shopping_list_recycler_view.setAdapter(new ShoppingListAdapter(shoppingListViewModel, this, this));
-        shopping_list_recycler_view.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        shopping_list_recycler_view.setLayoutManager(new StaggeredGridLayoutManager(NO_OF_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
+        observableViewModel();
+    }
+
+    private void observableViewModel() {
+        shoppingListViewModel.getProductList().observe(this, products -> {
+            if (products != null && products.size() > 0)
+                shopping_list_recycler_view.setVisibility(View.VISIBLE);
+        });
+
+        shoppingListViewModel.getError().observe(this, isError -> {
+            if (isError != null) if (isError) {
+                generic_error_text_view.setVisibility(View.VISIBLE);
+                shopping_list_recycler_view.setVisibility(View.GONE);
+                generic_error_text_view.setText(shoppingListViewModel.getContext().getResources().getString(R.string.generic_error_statement));
+            } else {
+                generic_error_text_view.setVisibility(View.GONE);
+                generic_error_text_view.setText(null);
+            }
+        });
+
+        shoppingListViewModel.getLoading().observe(this, isLoading -> {
+            if (isLoading != null) {
+                loadingView.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+                if (isLoading) {
+                    generic_error_text_view.setVisibility(View.GONE);
+                    shopping_list_recycler_view.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override

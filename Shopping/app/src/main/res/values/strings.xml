@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Shopping App</string>
     <string name="price_place_holder">Price : $%s</string>
+    <string name="generic_error_statement">An Error Occurred While Loading Data!</string>
 </resources>
