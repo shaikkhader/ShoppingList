@@ -17,6 +17,8 @@ import io.reactivex.schedulers.Schedulers;
 import shaik.khader.io.shopping.data.model.Product;
 import shaik.khader.io.shopping.data.model.Products;
 import shaik.khader.io.shopping.data.rest.ShoppingRepository;
+import shaik.khader.io.shopping.db.trolley.TrolleyProduct;
+import shaik.khader.io.shopping.ui.details.TrolleyRepository;
 
 /**
  *  Project           : Shopping
@@ -33,8 +35,9 @@ public class ShoppingListViewModel extends ViewModel {
     private static final String TAG = ShoppingListViewModel.class.getSimpleName();
 
 
-    @Inject
     ShoppingRepository mShoppingRepository;
+
+    TrolleyRepository mTrolleyRepository;
 
     private CompositeDisposable mCompositeDisposable;
 
@@ -43,14 +46,14 @@ public class ShoppingListViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>();
 
 
-
     @Inject
-    public ShoppingListViewModel(ShoppingRepository shoppingRepository) {
+    public ShoppingListViewModel(ShoppingRepository shoppingRepository, TrolleyRepository trolleyRepository) {
         mShoppingRepository = shoppingRepository;
+        mTrolleyRepository = trolleyRepository;
         mCompositeDisposable = new CompositeDisposable();
     }
 
-    LiveData<List<Product>> getProductList(){
+    LiveData<List<Product>> getProductList() {
         return productList;
     }
 
@@ -69,6 +72,7 @@ public class ShoppingListViewModel extends ViewModel {
                     }
                 }));
     }
+
 
     @Override
     protected void onCleared() {

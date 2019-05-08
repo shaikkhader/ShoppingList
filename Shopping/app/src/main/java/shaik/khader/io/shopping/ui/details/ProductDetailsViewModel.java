@@ -8,7 +8,20 @@
 package shaik.khader.io.shopping.ui.details;
 
 
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+import shaik.khader.io.shopping.data.model.Product;
+import shaik.khader.io.shopping.db.trolley.TrolleyProduct;
 
 /**
  *  Project           : Shopping
@@ -22,13 +35,48 @@ import androidx.lifecycle.ViewModel;
  */
 public class ProductDetailsViewModel extends ViewModel {
 
-//    @Inject
-//    ShoppingRepository mShoppingRepository;
-//    private CompositeDisposable mCompositeDisposable;
-//
-//    public ProductDetailsViewModel(ShoppingRepository shoppingRepository) {
-//        mShoppingRepository = shoppingRepository;
-//        mCompositeDisposable = new CompositeDisposable();
-//    }
+    private static final String TAG = ProductDetailsViewModel.class.getSimpleName();
+
+    TrolleyRepository mTrolleyRepository;
+
+    private CompositeDisposable mCompositeDisposable;
+
+    private Product mProduct;
+
+    @Inject
+    public ProductDetailsViewModel(TrolleyRepository trolleyRepository) {
+        mTrolleyRepository = trolleyRepository;
+        mCompositeDisposable = new CompositeDisposable();
+    }
+
+    public void setProduct(Product mProduct) {
+        this.mProduct = mProduct;
+    }
+
+    void addItemToTrolley(Product product) {
+        mTrolleyRepository.insertIntoTrolley(product);
+        mCompositeDisposable.add(mTrolleyRepository.getAllTrolleyProducts().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSingleObserver<List<TrolleyProduct>>() {
+                    @Override
+                    public void onSuccess(List<TrolleyProduct> products) {
+                        Log.d(TAG, "products" + products.size());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "Error" + e);
+                    }
+                }));
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (mCompositeDisposable != null) {
+            mCompositeDisposable.clear();
+            mCompositeDisposable = null;
+        }
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package shaik.khader.io.shopping.ui.shoppinglist;
+package shaik.khader.io.shopping.ui.trolley;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +19,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import shaik.khader.io.shopping.R;
 import shaik.khader.io.shopping.data.model.Product;
+import shaik.khader.io.shopping.db.trolley.TrolleyProduct;
+import shaik.khader.io.shopping.ui.shoppinglist.ProductSelectionListener;
+import shaik.khader.io.shopping.ui.shoppinglist.ShoppingListViewModel;
 
 /**
  *  Project           : Shopping
@@ -30,16 +33,16 @@ import shaik.khader.io.shopping.data.model.Product;
  *  Description       : Initial version
  *  
  */
-public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ProductViewHolder> {
+public class TrolleyListAdapter extends RecyclerView.Adapter<TrolleyListAdapter.ProductViewHolder> {
 
 
-    private final List<Product> data = new ArrayList<>();
+    private final List<TrolleyProduct> data = new ArrayList<>();
     private ProductSelectionListener productSelectionListener;
 
 
-    ShoppingListAdapter(ShoppingListViewModel shoppingListViewModel, LifecycleOwner lifecycleOwner, ProductSelectionListener productSelectionListener) {
+    TrolleyListAdapter(TrolleyPageViewModel trolleyPageViewModel, LifecycleOwner lifecycleOwner, ProductSelectionListener productSelectionListener) {
         this.productSelectionListener = productSelectionListener;
-        shoppingListViewModel.getProductList().observe(lifecycleOwner, product -> {
+        trolleyPageViewModel.getProductList().observe(lifecycleOwner, product -> {
             data.clear();
             if (product != null) {
                 data.addAll(product);
@@ -51,7 +54,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_shopping_list_adapter, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_trolley_list_adapter, parent, false);
         return new ProductViewHolder(view, productSelectionListener);
     }
 
@@ -67,29 +70,29 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     static final class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.shopping_list_productname)
+        @BindView(R.id.trolley_list_productname)
         TextView productNameTextView;
 
-        @BindView(R.id.shopping_list_product_image)
+        @BindView(R.id.trolley_list_product_image)
         ImageView productImageView;
 
-        private Product product;
+        private TrolleyProduct product;
 
-        ProductViewHolder(@NonNull View itemView,final ProductSelectionListener productSelectionListener) {
+        ProductViewHolder(@NonNull View itemView, final ProductSelectionListener productSelectionListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(v -> {
-                if(this.product != null && productSelectionListener != null) {
-                    productSelectionListener.onProductSelected(this.product);
+                if (this.product != null && productSelectionListener != null) {
+//                    productSelectionListener.onProductSelected(this.product);
                 }
             });
 
         }
 
-        void bind(Product product) {
+        void bind(TrolleyProduct product) {
             this.product = product;
             productNameTextView.setText(product.getName());
-            Picasso.get().load(product.getImage_url()).into(productImageView);
+            Picasso.get().load(product.getImageUrl()).into(productImageView);
         }
     }
 }

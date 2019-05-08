@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -17,6 +19,7 @@ import butterknife.BindView;
 import shaik.khader.io.shopping.R;
 import shaik.khader.io.shopping.base.BaseFragment;
 import shaik.khader.io.shopping.data.model.Product;
+import shaik.khader.io.shopping.ui.details.ProductDetailsFragment;
 import shaik.khader.io.shopping.util.ViewModelFactory;
 
 /**
@@ -37,6 +40,7 @@ public class ShoppingListFragment extends BaseFragment implements ProductSelecti
     @BindView(R.id.generic_error_text_view)
     TextView generic_error_text_view;
     @BindView(R.id.loading_progress_view)
+
     View loadingView;
 
 
@@ -63,6 +67,10 @@ public class ShoppingListFragment extends BaseFragment implements ProductSelecti
 
     @Override
     public void onProductSelected(Product product) {
-        Toast.makeText(getContext(), "Product selected", Toast.LENGTH_LONG).show();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.add(R.id.screenContainer, ProductDetailsFragment.getInstance(product));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

@@ -1,5 +1,10 @@
 package shaik.khader.io.shopping.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.room.Entity;
+
 /**
  *  Project           : Shopping
  *  File Name         : Product
@@ -10,7 +15,7 @@ package shaik.khader.io.shopping.data.model;
  *  Description       : Initial version
  *  
  */
-public class Product {
+public class Product implements Parcelable {
 
     private String name;
 
@@ -18,7 +23,26 @@ public class Product {
 
     private String image_url;
 
-    private String rating;
+    private float rating;
+
+    protected Product(Parcel in) {
+        name = in.readString();
+        price = in.readString();
+        image_url = in.readString();
+        rating = in.readFloat();
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -44,11 +68,24 @@ public class Product {
         this.image_url = image_url;
     }
 
-    public String getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(price);
+        parcel.writeString(image_url);
+        parcel.writeFloat(rating);
     }
 }
