@@ -1,0 +1,88 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        applicationId "shaik.khader.io.shopping"
+        minSdkVersion 23
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // ------ Support Libraries -----------------
+
+    implementation deps.support.appcompat_v7
+    implementation deps.support.support_compat
+    implementation deps.support.support_v4
+    implementation deps.support.design
+    implementation deps.support.support_core_utils
+    implementation deps.support.support_core_ui
+    implementation deps.support.support_media_compat
+    implementation deps.support.support_fragment
+    implementation deps.support.support_v13
+    implementation deps.support.cardview_v7
+    implementation deps.support.gridlayout_v7
+    implementation deps.support.recyclerview_v7
+    implementation deps.support.preference_v7
+    implementation deps.support.preference_v14
+    implementation deps.support.support_annotations
+
+
+    // -------- Architecture components -----------------
+    implementation deps.archComponents.lifecycle_extensions
+    implementation deps.archComponents.constraint_layout
+
+
+    // ---------- Dagger ---------------
+    implementation deps.dagger.core
+    annotationProcessor deps.dagger.compiler
+    implementation deps.dagger.support
+    annotationProcessor deps.dagger.processor
+
+    // ---------- Butter Knife ----------
+    implementation deps.butterknife.core
+    annotationProcessor deps.butterknife.compiler
+
+    // ---------- Retrofit 2 ------------
+
+    implementation deps.retrofit2.core
+    implementation deps.retrofit2.converterGson
+    implementation deps.retrofit2.adapter_rxjava2
+    implementation deps.retrofit2.moshi
+    implementation deps.retrofit2.converter_moshi
+
+
+    // ---------- Rx Java 2 ------------
+    implementation deps.rxJava2.core
+    implementation deps.rxJava2.rxandroid
+
+
+    // ------------ Util -----------------
+//    implementation deps.util.glide_core
+//    annotationProcessor deps.util.glide_annotation_processor
+
+    // --------- Android UI/UnitTest --------
+
+    testImplementation deps.test.junit
+    androidTestImplementation deps.test.support_test_runner
+    androidTestImplementation deps.test.espresso_core
+
+}
