@@ -7,7 +7,8 @@
 
 package shaik.khader.io.shopping.ui.details;
 
-import android.arch.lifecycle.ViewModel;
+
+import androidx.lifecycle.ViewModel;
 
 /**
  *  Project           : Shopping

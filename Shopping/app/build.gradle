@@ -29,21 +29,10 @@ dependencies {
 
     // ------ Support Libraries -----------------
 
-    implementation deps.support.appcompat_v7
-    implementation deps.support.support_compat
-    implementation deps.support.support_v4
-    implementation deps.support.design
-    implementation deps.support.support_core_utils
-    implementation deps.support.support_core_ui
-    implementation deps.support.support_media_compat
-    implementation deps.support.support_fragment
-    implementation deps.support.support_v13
-    implementation deps.support.cardview_v7
-    implementation deps.support.gridlayout_v7
-    implementation deps.support.recyclerview_v7
-    implementation deps.support.preference_v7
-    implementation deps.support.preference_v14
-    implementation deps.support.support_annotations
+    implementation deps.support.appcompat
+    implementation deps.support.cardview
+    implementation deps.support.recyclerview
+
 
 
     // -------- Architecture components -----------------
@@ -69,6 +58,13 @@ dependencies {
     implementation deps.retrofit2.moshi
     implementation deps.retrofit2.converter_moshi
 
+    // ----------- Room ------------
+
+    implementation deps.room.runtime
+    annotationProcessor deps.room.compiler
+    implementation deps.room.rxjava2
+    implementation deps.room.testing
+
 
     // ---------- Rx Java 2 ------------
     implementation deps.rxJava2.core
@@ -76,8 +72,11 @@ dependencies {
 
 
     // ------------ Util -----------------
-//    implementation deps.util.glide_core
-//    annotationProcessor deps.util.glide_annotation_processor
+
+    implementation deps.util.picasso
+
+
+
 
     // --------- Android UI/UnitTest --------
 

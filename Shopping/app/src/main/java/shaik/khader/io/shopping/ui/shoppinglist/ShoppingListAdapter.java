@@ -1,13 +1,16 @@
 package shaik.khader.io.shopping.ui.shoppinglist;
 
-import android.arch.lifecycle.LifecycleOwner;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +85,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         void bind(Product product) {
             this.product = product;
             productNameTextView.setText(product.getName());
+            Picasso.get().load(product.getImage_url()).into(productImageView);
         }
     }
 }

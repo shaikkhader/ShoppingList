@@ -9,7 +9,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import shaik.khader.io.shopping.data.rest.ShoppingService;
 
-@Singleton
 @Module(includes = ViewModelModule.class)
 public class ApplicationModule {
 
