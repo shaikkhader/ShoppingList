@@ -1,2 +1,3 @@
 # ShoppingList
-Android Project demonstrates Clean Code MVVM+RXJava2+Dagger+Room+Retrofit
+Android Project demonstrates Clean Code MVVM + RXJava2 + Dagger + Room + Retrofit
+
