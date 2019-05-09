@@ -37,7 +37,6 @@ public class ShoppingListViewModel extends ViewModel {
 
 
     private ShoppingRepository mShoppingRepository;
-    private TrolleyRepository mTrolleyRepository;
     private Context mContext;
 
     private CompositeDisposable mCompositeDisposable;
@@ -48,9 +47,8 @@ public class ShoppingListViewModel extends ViewModel {
 
 
     @Inject
-    public ShoppingListViewModel(ShoppingRepository shoppingRepository, TrolleyRepository trolleyRepository, Context context) {
+    ShoppingListViewModel(ShoppingRepository shoppingRepository, Context context) {
         mShoppingRepository = shoppingRepository;
-        mTrolleyRepository = trolleyRepository;
         mContext = context;
         mCompositeDisposable = new CompositeDisposable();
     }
@@ -86,7 +84,7 @@ public class ShoppingListViewModel extends ViewModel {
                 }));
     }
 
-    public Context getContext() {
+    Context getContext() {
         return mContext;
     }
 

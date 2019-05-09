@@ -4,4 +4,18 @@
     <dimen name="list_card_view_corner_radius">5dp</dimen>
     <dimen name="list_item_text_margin">6dp</dimen>
     <dimen name="list_item_product_image_height">100dp</dimen>
+    <dimen name="product_details_name_tv_margin">16dp</dimen>
+    <dimen name="product_details_price_tv_margin">16dp</dimen>
+    <dimen name="product_details_image_size">200dp</dimen>
+    <dimen name="product_details_button_margin">6dp</dimen>
+    <dimen name="summary_item_margin">6dp</dimen>
+    <dimen name="trolley_page_recycler_view_margin">16dp</dimen>
+    <dimen name="trolley_page_item_image_width">100dp</dimen>
+    <dimen name="trolley_page_item_image_height">100dp</dimen>
+    <dimen name="trolley_page_item_name_margin">6dp</dimen>
+    <dimen name="trolleypage_item_margin">6dp</dimen>
+    <dimen name="trolley_page_card_radius">5dp</dimen>
+    <dimen name="delete_icon_padding">6dp</dimen>
+    <dimen name="delete_icon_size">36dp</dimen>
+    <dimen name="trolley_product_image_margin">6dp</dimen>
 </resources>

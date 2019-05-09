@@ -2,37 +2,57 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_height="150dp"
+    android:layout_margin="6dp"
     android:background="@android:color/white"
-    app:cardCornerRadius="5dp">
+    app:cardCornerRadius="@dimen/trolley_page_card_radius">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/white">
 
         <ImageView
             android:id="@+id/trolley_list_product_image"
-            android:layout_width="100dp"
+            android:layout_width="@dimen/trolley_page_item_image_width"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/trolley_product_image_margin"
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/trolley_list_item_delete"
+            android:layout_width="@dimen/delete_icon_size"
+            android:layout_height="@dimen/delete_icon_size"
+            android:padding="@dimen/delete_icon_padding"
+            android:src="@drawable/ic_clear_black_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/trolley_list_productname"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:background="@color/colorAccent"
+            android:layout_margin="@dimen/trolley_page_item_name_margin"
             android:gravity="start"
-            android:text="Hello"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintLeft_toRightOf="@+id/shopping_list_product_image"
-            app:layout_constraintRight_toRightOf="parent"
+            android:maxLines="2"
+            app:layout_constraintLeft_toRightOf="@+id/trolley_list_product_image"
+            app:layout_constraintRight_toLeftOf="@+id/trolley_list_item_delete"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/trolley_list_product_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/trolley_page_item_name_margin"
+            android:gravity="start"
+            android:maxLines="2"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintTop_toBottomOf="@+id/trolley_list_productname"
+            app:layout_constraintLeft_toRightOf="@+id/trolley_list_product_image"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

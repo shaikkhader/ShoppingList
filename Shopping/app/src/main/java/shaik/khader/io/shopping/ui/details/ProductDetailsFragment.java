@@ -5,14 +5,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
@@ -46,15 +44,17 @@ public class ProductDetailsFragment extends BaseFragment {
     ImageView product_imageView;
     @BindView(R.id.add_remove_from_cart_Button)
     Button add_remove_from_cart_Button;
-    @BindView(R.id.checkout_Button)
-    Button checkout_Button;
+    @BindView(R.id.trolley_button)
+    Button trolley_button;
+
+    private static final String PRODUCT_EXTRA = "product";
 
 
     public static ProductDetailsFragment getInstance(Product product) {
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         if (product != null) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable("product", product);
+            bundle.putParcelable(PRODUCT_EXTRA, product);
             productDetailsFragment.setArguments(bundle);
         }
         return productDetailsFragment;
@@ -77,29 +77,39 @@ public class ProductDetailsFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         productDetailsViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductDetailsViewModel.class);
-        mProduct = getArguments().getParcelable("product");
-        productDetailsViewModel.setProduct(mProduct);
+        mProduct = getArguments() != null && getArguments().containsKey(PRODUCT_EXTRA) ? getArguments().getParcelable(PRODUCT_EXTRA) : null;
+        if (mProduct == null)
+            return;
+        productDetailsViewModel.fetchData();
+        //Update UI Elements
         Picasso.get().load(mProduct.getImage_url()).into(product_imageView);
         product_name_detail_text_view.setText(mProduct.getName());
-        product_price_detail_text_view.setText(getResources().getString(R.string.price_place_holder,mProduct.getPrice()));
-        add_remove_from_cart_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                productDetailsViewModel.addItemToTrolley(mProduct);
-            }
+        product_price_detail_text_view.setText(getResources().getString(R.string.price_place_holder, mProduct.getPrice()));
+
+        observableViewModel();
+
+        //add action listeners
+        add_remove_from_cart_Button.setOnClickListener( addToCartView -> {
+            productDetailsViewModel.addItemToTrolley(mProduct);
         });
 
-        checkout_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.add(R.id.screenContainer, TrolleyPageFragment.getInstance());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                Toast.makeText(getContext(), "Product selected", Toast.LENGTH_LONG).show();
-            }
+        trolley_button.setOnClickListener( trolleyButtonView -> {
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.add(R.id.screenContainer, TrolleyPageFragment.getInstance());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         });
 
+
+    }
+
+
+    private void observableViewModel() {
+        productDetailsViewModel.getProductList().observe(this, products -> {
+            if (products != null)
+                trolley_button.setText(productDetailsViewModel.getContext().getResources()
+                        .getString(R.string.checkout,String.valueOf(products.size())));
+        });
     }
 }

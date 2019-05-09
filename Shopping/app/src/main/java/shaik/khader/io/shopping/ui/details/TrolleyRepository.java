@@ -28,7 +28,12 @@ public class TrolleyRepository {
         TrolleyProduct trolleyProduct = new TrolleyProduct();
         trolleyProduct.setName(product.getName());
         trolleyProduct.setImageUrl(product.getImage_url());
+        trolleyProduct.setPrice(Float.parseFloat(product.getPrice()));
         trolleyProduct.setRating(product.getRating());
         trolleyDao.insert(trolleyProduct);
+    }
+
+    public void deleteProduct(TrolleyProduct trolleyProduct){
+        trolleyDao.remove(trolleyProduct);
     }
 }

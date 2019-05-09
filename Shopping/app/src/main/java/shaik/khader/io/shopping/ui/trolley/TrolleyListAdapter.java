@@ -37,11 +37,14 @@ public class TrolleyListAdapter extends RecyclerView.Adapter<TrolleyListAdapter.
 
 
     private final List<TrolleyProduct> data = new ArrayList<>();
-    private ProductSelectionListener productSelectionListener;
+    private TrolleyItemActionListener trolleyItemActionListener;
+
+    private TrolleyPageViewModel trolleyPageViewModel;
 
 
-    TrolleyListAdapter(TrolleyPageViewModel trolleyPageViewModel, LifecycleOwner lifecycleOwner, ProductSelectionListener productSelectionListener) {
-        this.productSelectionListener = productSelectionListener;
+    TrolleyListAdapter(TrolleyPageViewModel trolleyPageViewModel, LifecycleOwner lifecycleOwner, TrolleyItemActionListener productSelectionListener) {
+        this.trolleyItemActionListener = productSelectionListener;
+        this.trolleyPageViewModel = trolleyPageViewModel;
         trolleyPageViewModel.getProductList().observe(lifecycleOwner, product -> {
             data.clear();
             if (product != null) {
@@ -55,12 +58,12 @@ public class TrolleyListAdapter extends RecyclerView.Adapter<TrolleyListAdapter.
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_trolley_list_adapter, parent, false);
-        return new ProductViewHolder(view, productSelectionListener);
+        return new ProductViewHolder(view, trolleyItemActionListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder productViewHolder, int position) {
-        productViewHolder.bind(data.get(position));
+        productViewHolder.bind(trolleyPageViewModel,data.get(position));
     }
 
     @Override
@@ -76,22 +79,29 @@ public class TrolleyListAdapter extends RecyclerView.Adapter<TrolleyListAdapter.
         @BindView(R.id.trolley_list_product_image)
         ImageView productImageView;
 
+        @BindView(R.id.trolley_list_product_price)
+        TextView trolley_list_product_price;
+
+        @BindView(R.id.trolley_list_item_delete)
+        ImageView trolley_list_item_delete;
+
         private TrolleyProduct product;
 
-        ProductViewHolder(@NonNull View itemView, final ProductSelectionListener productSelectionListener) {
+        ProductViewHolder(@NonNull View itemView, final TrolleyItemActionListener trolleyItemActionListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(v -> {
-                if (this.product != null && productSelectionListener != null) {
-//                    productSelectionListener.onProductSelected(this.product);
+            trolley_list_item_delete.setOnClickListener(v -> {
+                if (this.product != null && trolleyItemActionListener != null) {
+                    trolleyItemActionListener.deleteProduct(product);
                 }
             });
 
         }
 
-        void bind(TrolleyProduct product) {
+        void bind(TrolleyPageViewModel trolleyPageViewModel,TrolleyProduct product) {
             this.product = product;
             productNameTextView.setText(product.getName());
+            trolley_list_product_price.setText(trolleyPageViewModel.getContext().getResources().getString(R.string.price_place_holder,String.valueOf(product.getPrice())));
             Picasso.get().load(product.getImageUrl()).into(productImageView);
         }
     }

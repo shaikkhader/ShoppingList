@@ -8,8 +8,11 @@
 package shaik.khader.io.shopping.ui.details;
 
 
+import android.content.Context;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
@@ -37,36 +40,34 @@ public class ProductDetailsViewModel extends ViewModel {
 
     private static final String TAG = ProductDetailsViewModel.class.getSimpleName();
 
-    TrolleyRepository mTrolleyRepository;
+    private TrolleyRepository mTrolleyRepository;
 
     private CompositeDisposable mCompositeDisposable;
 
-    private Product mProduct;
+    private Context mContext;
+
+    private final MutableLiveData<List<TrolleyProduct>> productList = new MutableLiveData<>();
+
 
     @Inject
-    public ProductDetailsViewModel(TrolleyRepository trolleyRepository) {
+    ProductDetailsViewModel(TrolleyRepository trolleyRepository, Context context) {
         mTrolleyRepository = trolleyRepository;
+        mContext = context;
         mCompositeDisposable = new CompositeDisposable();
     }
 
-    public void setProduct(Product mProduct) {
-        this.mProduct = mProduct;
+    public Context getContext() {
+        return mContext;
     }
+
+    LiveData<List<TrolleyProduct>> getProductList() {
+        return productList;
+    }
+
 
     void addItemToTrolley(Product product) {
         mTrolleyRepository.insertIntoTrolley(product);
-        mCompositeDisposable.add(mTrolleyRepository.getAllTrolleyProducts().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSingleObserver<List<TrolleyProduct>>() {
-                    @Override
-                    public void onSuccess(List<TrolleyProduct> products) {
-                        Log.d(TAG, "products" + products.size());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "Error" + e);
-                    }
-                }));
+        fetchData();
     }
 
     @Override
@@ -79,4 +80,19 @@ public class ProductDetailsViewModel extends ViewModel {
     }
 
 
+    void fetchData() {
+        mCompositeDisposable.add(mTrolleyRepository.getAllTrolleyProducts().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSingleObserver<List<TrolleyProduct>>() {
+                    @Override
+                    public void onSuccess(List<TrolleyProduct> products) {
+                        Log.d(TAG, "products" + products);
+                        productList.setValue(products);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "Error" + e);
+                    }
+                }));
+    }
 }

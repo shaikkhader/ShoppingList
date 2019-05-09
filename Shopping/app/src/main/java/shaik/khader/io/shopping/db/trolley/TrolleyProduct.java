@@ -17,6 +17,17 @@ public class TrolleyProduct {
     private String imageUrl;
 
     @Nullable
+    private float price;
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    @Nullable
     private float rating;
 
     public float getRating() {

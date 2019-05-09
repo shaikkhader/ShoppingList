@@ -4,24 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:clickable="true">
+    android:clickable="true"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/product_name_detail_text_view"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/product_details_name_tv_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Hello"
         android:gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/product_price_detail_text_view"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/product_details_price_tv_margin"
         android:layout_width="wrap_content"
-        android:text="xyz"
-        android:textSize="20sp"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
         app:layout_constraintTop_toBottomOf="@+id/product_name_detail_text_view"
         app:layout_constraintRight_toRightOf="parent"
         android:gravity="center_horizontal"/>
@@ -29,8 +28,7 @@
     <ImageView
         android:id="@+id/product_imageView"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:text="Product details"
+        android:layout_height="@dimen/product_details_image_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -40,19 +38,19 @@
         android:id="@+id/add_remove_from_cart_Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:text="Add to Cart"
+        android:layout_margin="@dimen/product_details_button_margin"
+        android:text="@string/add_to_cart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/checkout_Button" />
+        app:layout_constraintRight_toLeftOf="@+id/trolley_button" />
 
     <Button
-        android:id="@+id/checkout_Button"
+        android:id="@+id/trolley_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:text="Checkout"
+        android:layout_margin="@dimen/product_details_button_margin"
+        android:text="@string/checkout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/add_remove_from_cart_Button"
         app:layout_constraintRight_toRightOf="parent" />
